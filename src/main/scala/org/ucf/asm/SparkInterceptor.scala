@@ -2,9 +2,9 @@ package org.ucf.asm
 
 object SparkInterceptor {
   def beforeInvoke() = {
-    println("Before: " + System.currentTimeMillis())
+    println("##################Before RDD compute: " + System.currentTimeMillis())
   }
   def afterInvoke() = {
-    println("After: " + System.currentTimeMillis())
+    println("##################After RDD compute: " + System.currentTimeMillis())
   }
 }
