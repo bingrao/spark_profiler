@@ -1,6 +1,5 @@
 # Created by https://www.gitignore.io/api/eclipse
 
-### Eclipse ###
 .metadata
 bin/
 tmp/
@@ -52,11 +51,10 @@ local.properties
 .scala_dependencies
 .worksheet
 
-### Eclipse Patch ###
-# Eclipse Core		
+# Eclipse Core
 .project
 
-# JDT-specific (Eclipse Java Development Tools)		
+# JDT-specific (Eclipse Java Development Tools)
 .classpath
 
 # Maven project
@@ -73,20 +71,10 @@ buildNumber.properties
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
 
-# Intellij IDE
+# Intellij IDA
 .idea/
-
-# [SBT] Simple Build Tool
-# http://www.scala-sbt.org/release/docs/Getting-Started/Directories.html#configuring-version-control
-
-dist/*
-target/
-lib_managed/
-src_managed/
-project/
-.history
-.cache
-.lib/
-
+*.iml
+*.log
 
 # End of https://www.gitignore.io/api/eclipse
+

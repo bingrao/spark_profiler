@@ -4,19 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  	<groupId>org.ucf.asm</groupId>
-  	<artifactId>spark_profiler</artifactId>
+  	<groupId>ucf.spark</groupId>
+  	<artifactId>profiler</artifactId>
   	<version>1.0-SNAPSHOT</version>
-  	<name>spark_profiler</name>
+  	<name>profiler</name>
   	<packaging>jar</packaging>
 
      <properties>
          <scala.version>2.11.12</scala.version>
          <scala.binary.version>2.11</scala.binary.version>
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-         <project.main.class>org.ucf.asm.Agent</project.main.class>
-         <project.premain.class>org.ucf.asm.Agent</project.premain.class>
-     </properties>
+         <project.main.class>ucf.spark.Agent</project.main.class>
+         <project.premain.class>ucf.spark.Agent</project.premain.class>
+         <project.agentmain.class>ucf.spark.Agent</project.agentmain.class>
+    </properties>
     <repositories>
       <repository>
             <id>scalaz</id>
@@ -69,14 +70,15 @@
         	<groupId>junit</groupId>
         	<artifactId>junit</artifactId>
         	<version>4.11</version>
-			<scope>test</scope>        
+		<scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.scalatest/scalatest_* -->
         <dependency>
 			<groupId>org.scalatest</groupId>
 			<artifactId>scalatest_${scala.binary.version}</artifactId>
-			<version>3.0.0-M12</version>
+			<version>3.2.0-M1</version>
 		</dependency>
+
 
         <!-- https://mvnrepository.com/artifact/org.javassist/javassist -->
         <dependency>
@@ -84,6 +86,7 @@
             <artifactId>javassist</artifactId>
             <version>3.25.0-GA</version>
         </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/org.scala-lang.modules/scala-asm -->
         <dependency>
@@ -93,12 +96,39 @@
         </dependency>
 
 
+        <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-util</artifactId>
+            <version>7.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+
+
     </dependencies>
 
   <build>
+      <resources>
+          <resource>
+              <directory>src/main/resources</directory>
+          </resource>
+      </resources>
     <plugins>
         <plugin>
         	<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.5.1</version>
             <configuration>
@@ -108,15 +138,35 @@
         </plugin>
 
         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.6</version>
+            <configuration>
+                <archive>
+                    <manifestEntries>
+                        <Agent-Class>${project.agentmain.class}</Agent-Class>
+                        <Premain-Class>${project.agentmain.class}</Premain-Class>
+                    </manifestEntries>
+                </archive>
+            </configuration>
+        </plugin>
+
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.5</version>
+            <version>2.6</version>
             <configuration>
                 <archive>
                     <manifest>
                         <mainClass>${project.main.class}</mainClass>
                     </manifest>
                     <manifestEntries>
+                        <Agent-Class>${project.agentmain.class}</Agent-Class>
                         <Premain-Class>${project.premain.class}</Premain-Class>
+                        <Can-Redefine-Classes>false</Can-Redefine-Classes>
+                        <Can-Retransform-Classes>false</Can-Retransform-Classes>
+                        <Can-Set-Native-Method-Prefix>false</Can-Set-Native-Method-Prefix>
                     </manifestEntries>
                 </archive>
                 <descriptorRefs>
